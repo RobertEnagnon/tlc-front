@@ -1,0 +1,16 @@
+/* .strategy{
+    overflow: hidden;
+} */
+.strategy .image{
+    width: 200px;
+    margin: auto;
+}
+
+.strategy .image img{
+    width: 100%;
+    border-radius: 50%;
+}
+.strategy p{
+    color: gray;
+    font-size: 18px;
+}

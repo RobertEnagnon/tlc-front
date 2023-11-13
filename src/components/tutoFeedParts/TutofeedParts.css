@@ -1,0 +1,53 @@
+.tutoFeedPart{
+    display: flex !important;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+/* 
+    MuiBox-root
+    MuiTabs-root
+    css-8je8zh-MuiTouchRipple-root 
+    MuiTouchRipple-root 
+    MuiTabs-indicator 
+    css-1aquho2-MuiTabs-indicator
+*/
+.MuiButtonBase-root.Mui-selected{
+    color: #108643 !important;
+}
+span.MuiTabs-indicator.css-1aquho2-MuiTabs-indicator  {
+    background-color: #108643 !important;
+}
+
+.MuiTab-root {
+    color: #863b10 !important;
+    font-size: 16px !important;
+}
+
+
+.tutoFeedPart .image{
+    width: 100%;
+    margin-right: 0;
+    padding-right: 0;
+}
+.tutoFeedPart .image img{
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    overflow: hidden;
+}
+
+.tutoFeedPart .description{
+    font-size: 22px;
+    color: var(--paragraphColor);
+}
+@media all and (max-width: 1200px) {
+    
+}
+
+@media all and (max-width: 960px) {
+    
+}

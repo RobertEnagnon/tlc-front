@@ -1,0 +1,136 @@
+
+
+         
+/* .toolbar{
+    display: flex;
+    justify-content: space-between;
+} */
+.logo{
+    font-family: 'Rubik', sans-serif !important;
+}
+.logo img{
+    border-radius: 50%;
+    margin-right: 5px;
+}
+.user{
+    position: relative;
+}
+.options {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    z-index: 999;
+    border: 1px solid lightgrey;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 200px;
+    font-weight: 300;
+    color: gray;
+  }
+.profile{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+/* .navbar{
+    justify-content: center;
+} */
+.link{
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    padding: 10px ;
+    transition: all ease-in 0.3s ;
+  }
+  .user .options .link{
+    color: #0F2027;
+  }
+  
+.navbar .link:hover,.compte .link:hover,.navbar .link:focus{
+    color: rgb(0, 255, 157);
+    transition: all ease-in 0.3s ;
+    border-bottom: 1px solid whitesmoke;
+    padding-top: 5px;
+}
+.compte{
+    justify-content: end;
+}
+
+.humberger{
+    display: none !important;
+}
+.sub-services{
+    border-top: 2px solid #264653;
+}
+.sub-services .link:hover{
+    color: rgb(0, 255, 157);
+    transition: all ease-in 0.3s ;
+    border-bottom: 1px solid whitesmoke;
+    padding-top: 5px;
+    width: 100%;
+}
+
+  
+@media all and (max-width:1200px) {
+    .navbar{
+        position: absolute;
+        justify-content: space-evenly;
+        left: 0;
+        right: 0;
+        width: 100%;
+        margin: auto;
+        padding: auto;
+        top: 65px;
+        background: rgba(0,0,0,0.2);
+        margin-left:0 !important;
+        padding-left: 0;
+        height: 65px;
+        align-items: center;
+    }
+}
+@media all and (max-width: 960px) {
+    .left-brand{
+        width: 100% !important;
+    }
+    .navbar{
+        display: none !important;
+    }
+    .humberger{
+        display: block !important ;
+    }
+    .side-bar{
+        background: #0F2027;
+    }
+    .side-bar .link{
+        text-decoration: none;
+        color: white;
+        font-size: 18px;
+        padding: 10px ;
+        transition: all ease-in 0.3s ;
+      }
+      
+    .side-bar .link:hover{
+        color: rgb(0, 255, 157);
+        transition: all ease-in 0.3s ;
+        padding-top: 5px;
+        border-bottom: 1px solid rgb(0, 255, 157);
+        padding-top: 5px;
+    }
+    .compte{
+        /* justify-content: end; */
+        margin-left: 20px;
+        /* padding-left: 20px; */
+        
+    }
+    .compte .link{
+        margin-bottom: 10px;
+    }
+}
+

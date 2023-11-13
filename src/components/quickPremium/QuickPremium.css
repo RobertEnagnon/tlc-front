@@ -1,0 +1,29 @@
+.quickPremium{
+    background: #11998e;  /* fallback for old browsers */
+    background: var(--greenBg);/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding: 30px 0;
+
+}
+.quickPremium p{
+    color: rgb(253, 243, 243);
+    font-size: 22px;
+}
+#premium{
+    color: #ecf8f8;
+    background: #0F2027;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #2C5364, #203A43, #0F2027);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #2C5364, #203A43, #0F2027); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    
+    width: 200px;
+    margin: auto;
+    padding: 10px 10px;
+    font-size: 30px;
+    border-radius: 50px;
+}
+.quickPremium h5{
+    color: black;
+}

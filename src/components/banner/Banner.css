@@ -1,0 +1,69 @@
+.banner{
+   /* background: rgb(34,195,192);
+    background: linear-gradient(0deg, rgba(34,195,192,1) 1%, rgba(0,213,166,1) 84%); */
+    background: #36904A;
+    background: linear-gradient(to bottom, #36904A 1%, #85FC8A 84%);
+}
+
+.ronasdev{
+    color: rgb(0, 255, 157);
+    font-family: 'Rubik', sans-serif !important;
+}
+.principal{
+    word-wrap: break-word;
+    color: rgba(255, 255, 255, 0.856);
+    font-size: 24px;
+    
+}
+.title{
+    font-family: 'Abel', sans-serif !important;
+}
+
+
+.banner .right{
+    background-image: url("../../assets/images/banner.png") ;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: 600px;
+    float: right;
+    min-height: 78vh;
+    transform: matrix(-1,0,0,1,0,0);
+}
+
+
+@media all and (max-width:1200px) {
+    .banner .wrapper{
+        margin-top: 80px !important;
+        /* padding-bottom: 20px; */
+    }
+    .banner .wrapper .left{
+       margin-bottom: 20px;
+    }
+}
+@media all and (max-width: 960px) {
+    .banner .right{
+        display: none !important;
+    }
+    .banner .wrapper{
+        margin-top: 0px !important;
+        padding-top: 0 !important;
+        /* padding-bottom: 20px; */
+        justify-content: center !important;
+        height: auto !important;
+    }
+    .banner .wrapper .left{
+        margin-top: 0;
+    }
+    .banner .wrapper .title{
+        font-size: 30px !important;
+    }
+
+    .btnFirst{
+        font-size: 16px !important;
+        padding: 10px 20px !important;
+        margin-top:0px !important;
+        margin-bottom: 10px !important;
+    }
+    
+}

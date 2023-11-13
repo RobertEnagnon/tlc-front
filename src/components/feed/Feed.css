@@ -1,0 +1,40 @@
+.feed{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding:30px 0;
+}
+.feed .top{
+    max-width: 90%;
+    text-align: center;
+}
+
+.top .title span:last-of-type{
+    color: #108643 !important;
+}
+.top .paragraph{
+    padding: 5px 20px;
+    font-size: 20px;
+    width: 70%;
+    margin: auto;
+    color: grey;
+}
+
+@media all and (max-width: 960px) {
+    .feed .top{
+        width: 95%;
+        text-align: justify;
+    }
+    .feed .top .title{
+
+        font-size: 25px !important;
+        margin-bottom: 10px;
+    }
+    .top .paragraph{
+        padding: 5px ;
+        font-size: 20px;
+        width: 90%;
+        margin: auto;
+        color: grey;
+    }
+}

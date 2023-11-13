@@ -1,0 +1,9 @@
+.banniere{
+    background: #11998e; 
+    background: var(--greenBg) !important;
+}
+
+.info{
+    font-size: 30px !important;
+    font-style: italic;
+}
