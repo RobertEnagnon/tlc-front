@@ -11,29 +11,31 @@ import {
   CardMedia,
 } from '@mui/material';
 import { Favorite as FavoriteIcon, FavoriteBorder as FavoriteBorderIcon } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
 
 const TrainingCard = ({ course, onFavoriteToggle }) => {
   return (
     <Card>
-      <CardMedia
+        <Link to="/formations/show/1">
+        <CardMedia
         component="img"
         height="200"
-        image={course.image} // Ajoutez le chemin de l'image de chaque formation ici
+        image={`${process.env.REACT_APP_API_URL}/${course.banner}`} // Ajoutez le chemin de l'image de chaque formation ici
         alt={course.title}
       />
       <CardHeader
         action={
           <IconButton onClick={() => onFavoriteToggle(course.id)}>
-            {course.isFavorite ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
+            {course.favorites ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
           </IconButton>
         }
         title={course.title}
-        subheader={course.price}
+        subheader={course.type+': '+course.price+'€'}
       />
       <CardContent>
-        <Typography variant="body2">Catégorie: {course.category}</Typography>
-        <Typography variant="body2">Durée: {course.duration}</Typography>
-        <Rating value={course.rating} precision={0.5} readOnly />
+        <Typography variant="body2">Catégorie: {course.categorie.name}</Typography>
+        <Typography variant="body2">Durée: {course.totalDuration}</Typography>
+        <Rating value={Number(course.ratings)} precision={0.5} readOnly />
       </CardContent>
       <CardActions>
         <Button size="small" variant="contained" 
@@ -43,6 +45,7 @@ const TrainingCard = ({ course, onFavoriteToggle }) => {
           Détails
         </Button>
       </CardActions>
+        </Link>
     </Card>
   );
 };

@@ -27,16 +27,24 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width: 200px;
+    /* width: 200px; */
+    width: 300px;
     font-weight: 300;
     color: gray;
   }
 .profile{
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     margin-left: 20px;
     cursor: pointer;
+    /* margin-right: 0; */
+}
+.arrowDropdown{
+    position: absolute;
+    left: 63px;
+    top: 50%;
+    color: white;
 }
 
 /* .navbar{
@@ -54,7 +62,7 @@
   }
   
 .navbar .link:hover,.compte .link:hover,.navbar .link:focus{
-    color: rgb(0, 255, 157);
+    color: #006f57;
     transition: all ease-in 0.3s ;
     border-bottom: 1px solid whitesmoke;
     padding-top: 5px;

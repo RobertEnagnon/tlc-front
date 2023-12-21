@@ -1,23 +1,24 @@
 import React from 'react';
 import { Box, Button } from '@mui/material';
 
-const SubCategoryButtons = ({ subCategories, onSubCategorySelect }) => {
+const CategoryButtons = ({ categories, onCategoryNameSelect }) => {
+  
   return (
     <Box mt={4}>
-      {subCategories.map((subCategory) => (
+      {categories?.map((category) => (
         <Button
-          key={subCategory}
+          key={category.id}
           variant="outlined"
         //   color="info"
         className='btnSubCategory'    
           sx={{ mx: 2, my: 1 }}
-          onClick={() => onSubCategorySelect(subCategory)}
+          onClick={() => onCategoryNameSelect(category.name)}
         >
-          {subCategory}
+          {category.name}
         </Button>
       ))}
     </Box>
   );
 };
 
-export default SubCategoryButtons;
+export default CategoryButtons;

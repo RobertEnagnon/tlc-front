@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   // FormControl,
   // InputLabel,
@@ -10,117 +10,97 @@ import {
   Container
 } from '@mui/material';
 import TrainingBanner from '../../components/trainingBanner/TrainingBanner';
-import SubCategoryButtons from '../../components/subCategoryButtons/SubCategoryButtons';
 import TrainingList from '../../components/traningList/TrainingList';
+import CategoryButtons from '../../components/CategoryButtons/CategoryButtons';
 
-import reactImg from "../../assets/images/trainings/react.jpg"
-import reactNativeImg from "../../assets/images/trainings/react-native.jpeg";
-import flutterImg from "../../assets/images/trainings/flutter.png";
-import flutterAdvancedImg from "../../assets/images/trainings/flutter_advanced.jpeg";
-import pythonImg from "../../assets/images/trainings/python.jpeg";
-import phpImg from "../../assets/images/trainings/php.jpeg";
-import androidImg from "../../assets/images/trainings/android.jpeg";
-import nodeImg from "../../assets/images/trainings/nodeJs.jpeg";
 
-const coursesData = [
-  {
-    id: 1,
-    title: 'Formation React',
-    category: 'React',
-    price: 'Gratuit',
-    rating: 4.5,
-    duration: '8 heures',
-    isFavorite: false,
-    image: reactImg,
-  },
-  {
-    id: 2,
-    title: 'Dévenir expert en Flutter',
-    category: 'Flutter',
-    price: 'Payant',
-    rating: 5.0,
-    duration: '16 heures',
-    isFavorite: true,
-    image: flutterAdvancedImg,
-  },
-  {
-    id: 3,
-    title: 'Formation Python',
-    category: 'Sécurité Informatique',
-    price: 'Gratuit',
-    rating: 4.9,
-    duration: '17 heures',
-    isFavorite: true,
-    image: pythonImg,
-  },
-  {
-    id: 4,
-    title: 'Formation PHP',
-    category: 'Développement backend',
-    price: 'Payant',
-    rating: 4.5,
-    duration: '22 heures',
-    isFavorite: false,
-    image: phpImg,
-  },
-  {
-    id: 5,
-    title: 'Formation React-Native',
-    category: 'Développement mobile',
-    price: 'Payant',
-    rating: 3.6,
-    duration: '14 heures',
-    isFavorite: false,
-    image: reactNativeImg,
-  },
-  {
-    id: 6,
-    title: 'Formation Flutter',
-    category: 'Flutter',
-    price: 'Gratuit',
-    rating: 4.8,
-    duration: '8 heures',
-    isFavorite: true,
-    image: flutterImg,
-  },
-  {
-    id: 7,
-    title: 'Faire du mobile avec android',
-    category: 'Java',
-    price: 'Payant',
-    rating: 4.8,
-    duration: '22 heures',
-    isFavorite: true,
-    image: androidImg,
-  },
-  {
-    id: 8,
-    title: 'Dévenir fullStack avec Node.js, Express.js et MongoDB',
-    category: 'Développement fullstack',
-    price: 'Payant',
-    rating: 3.2,
-    duration: '36 heures',
-    isFavorite: true,
-    image: nodeImg,
-  },
-  // Ajoutez d'autres données factices pour les formations
-];
 
 
 const Training = () => {
-  // const [category, setCategory] = useState('Toutes');
-  const [selectedSubCategory, setSelectedSubCategory] = useState('Toutes');
+  // Les booleens qui permettent de savoir si on filtre les formations gratuites ou payantes
   const [filterFree, setFilterFree] = useState(false);
   const [filterPaid, setFilterPaid] = useState(false);
+  // Les données de toutes les formations
+  const [trainingData,setTrainingDate] = useState(null)
+  
+  // les données sur les categories
+  const [categories, setCategories] = useState([]);
+  const [selectedCategoryName, setSelectedCategoryName] = useState('Toutes');
 
-  // const handleCategoryChange = (event) => {
-  //   setCategory(event.target.value);
-  // };
+  const [isLoading, setIsLoading] = useState(false);
+  const [serverError, setServerError] = useState(null);
 
-  const handleFilterFreeChange = (event) => {
-    setFilterFree(event.target.checked);
+
+  // Récupérartions des données de formations dépuis l'api
+  useEffect(()=>{
+    setIsLoading(true);
+    const fetchData = async()=>{
+       // On définit les entêtes
+    const headers = {
+      "Content-Type": "application/json",
+    };
+      try {
+        // Obtenir toutes les formations
+        const trainResp = await fetch(process.env.REACT_APP_API_URL+'/trainings',{
+          headers
+        });
+        const trainData = await trainResp?.json();
+        setTrainingDate(trainData)
+        // Obtenir toutes les catégories de formations
+        const catResp = await fetch(process.env.REACT_APP_API_URL+'/categories',{
+          headers
+        });
+        const catData = await catResp?.json();
+        setCategories(catData);
+
+        setIsLoading(false)
+      } catch (error) {
+        setServerError(error);
+        setIsLoading(false);
+      }
+
+    }
+   
+
+    fetchData();
+  },[]);
+
+
+
+  // Charger la catégorie sur laquelle on a cliqué 
+const onCategoryNameSelect = (categoryName) => {
+    setSelectedCategoryName(categoryName);
   };
 
+  
+  /**
+   * On filtre les données à afficher en fonction du type de formation(gratuite ou payante)
+   * On renvoie un tablo corespondant au filtre de la categorie de formation et du type(gratuit|| payant)
+   * de formation
+   */
+  const filteredCourses = trainingData?.filter((course) => {
+    // Si la categorie cliquée est toutes ou autre que toutes
+    if (selectedCategoryName === 'Toutes' || course.categorie.name === selectedCategoryName) {
+      // Ici on renvoie uniquement les formations gratuites de la catégorie
+      if (filterFree && course.type === 'gratuit') {
+              return true;
+      }
+      // Ici on renvoie uniquement les formations payantes de la catégorie
+      if (filterPaid && course.type === 'payant') {
+        return true;
+      }
+      // Ici on renvoie les formations gratuites et payantes de la catégorie
+      return !filterFree && !filterPaid;
+    }
+    // Ici on renvoie toutes les formations sans exception
+    return false;
+  });
+
+   // La case à cocher pour Filtrer pour les formations gratuites
+   const handleFilterFreeChange = (event) => {
+    setFilterFree(event.target.checked);
+  };
+ // La case à cocher pour Filtrer pour les formations payantes
   const handleFilterPaidChange = (event) => {
     setFilterPaid(event.target.checked);
   };
@@ -130,91 +110,28 @@ const Training = () => {
     // Cela dépend de votre implémentation de gestion des données
   };
 
-  const subCategories = [
-    'Toutes',
-    'React',
-    'Java',
-    'Vue.js',
-    'Express.js',
-    'Développement fullstack',
-    'Développement backend',
-    'Développement frontend',
-    'Flutter',
-    'Android',
-    // Ajoutez d'autres sous-catégories ici
-  ];
-
-const handleSubCategorySelect = (subCategory) => {
-    setSelectedSubCategory(subCategory);
-  };
-
-  // const filteredCourses = coursesData.filter((course) => {
-  //   if (category === 'Toutes' || course.category === category) {
-  //     if (filterFree && course.price === 'Gratuit') {
-  //       return true;
-  //     }
-  //     if (filterPaid && course.price === 'Payant') {
-  //       return true;
-  //     }
-  //     return !filterFree && !filterPaid;
-  //   }
-  //   return false;
-  // });
-  const filteredCourses = coursesData.filter((course) => {
-    if (selectedSubCategory === 'Toutes' || course.category === selectedSubCategory) {
-      if (filterFree && course.price === 'Gratuit') {
-              return true;
-      }
-      if (filterPaid && course.price === 'Payant') {
-        return true;
-      }
-      return !filterFree && !filterPaid;
-    }
-    return false;
-  });
-
   return (
     <Box className="mainBg">
       <TrainingBanner />
-      <Container>
-        <SubCategoryButtons
-          subCategories={subCategories}
-          onSubCategorySelect={handleSubCategorySelect}
+      {isLoading ? <Box my={2} ml={2} sx={{fontSize: 30, textAlign: 'center'}}> CHARGEMENT...</Box> : 
+      (<Container>
+        <CategoryButtons
+          categories={categories}
+          onCategoryNameSelect={onCategoryNameSelect}
         />
         <Box my={2} ml={2} >
             <FormControlLabel
             control={<Checkbox checked={filterFree} onChange={handleFilterFreeChange} />}
-            label="Gratuits"
+            label="Gratuites"
           />
           <FormControlLabel
             control={<Checkbox checked={filterPaid} onChange={handleFilterPaidChange} />}
-            label="Payants"
+            label="Payantes"
           />
         </Box>
         <TrainingList courses={filteredCourses} onFavoriteToggle={handleFavoriteToggle} />
-      </Container>
+      </Container>)}
     </Box>
-
-    // <Box p={4}>
-    //   <FormControl fullWidth>
-    //     <InputLabel>Catégorie</InputLabel>
-    //     <Select value={category} onChange={handleCategoryChange}>
-    //       <MenuItem value="Toutes">Toutes</MenuItem>
-    //       <MenuItem value="Développement web">Développement web</MenuItem>
-    //       <MenuItem value="Développement mobile">Développement mobile</MenuItem>
-    //       {/* Ajoutez d'autres catégories */}
-    //     </Select>
-    //   </FormControl>
-    //   <FormControlLabel
-    //     control={<Checkbox checked={filterFree} onChange={handleFilterFreeChange} />}
-    //     label="Gratuits"
-    //   />
-    //   <FormControlLabel
-    //     control={<Checkbox checked={filterPaid} onChange={handleFilterPaidChange} />}
-    //     label="Payants"
-    //   />
-    //   <TrainingList courses={filteredCourses} onFavoriteToggle={handleFavoriteToggle} />
-    // </Box>
   );
 };
 

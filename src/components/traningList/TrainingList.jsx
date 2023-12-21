@@ -9,7 +9,7 @@ const TrainingList = ({ courses, onFavoriteToggle }) => {
       <Box
       className="traning-list"
       >
-        {courses.map((course) => (
+        {courses?.map((course) => (
           <TrainingCard key={course.id} course={course} onFavoriteToggle={onFavoriteToggle} />
         ))}
       </Box>

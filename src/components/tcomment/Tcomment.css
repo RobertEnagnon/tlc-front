@@ -1,0 +1,12 @@
+.commentImg{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+.authorName{
+    color: #515151;
+    font-size: 14px;
+}
+.tcommentContent{
+    color: var(--paragraphColor);
+}

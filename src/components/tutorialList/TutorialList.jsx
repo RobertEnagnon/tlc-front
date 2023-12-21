@@ -11,7 +11,7 @@ const TutorialList = () => {
 
   let [tutorials, setTutorials] = useState([]);
 
-  // Exemple de données de tutoriels
+ 
 
   // const data = useMemo(() => [
   //   {
@@ -96,6 +96,7 @@ const TutorialList = () => {
   //   },
   // ], [])
 
+   // récuperer de données de tutoriels
   useEffect(() => {
     fetch(process.env.REACT_APP_API_URL + "/tutorials")
       .then((res) => res.json())

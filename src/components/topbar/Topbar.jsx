@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,7 +12,11 @@ import {
   PersonAddAlt1 as PersonAddAlt1Icon,
   Login as LoginIcon,
   WorkspacePremium as WorkspacePremiumIcon,
-  TipsAndUpdates as TipsAndUpdatesIcon
+  TipsAndUpdates as TipsAndUpdatesIcon,
+  ArrowDropDown as ArrowDropDownIcon,
+  Logout as LogoutIcon,
+  Settings as SettingsIcon,
+  Notifications
 } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 import { Divider, IconButton, Stack, SwipeableDrawer } from '@mui/material';
@@ -23,19 +27,23 @@ import profile from "../../assets/images/noavatar.jpg";
 
 const Topbar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
-  // const [anchorEl, setAnchorEl] = useState(null);
+  // propriété d'ouverture du dropdown de user profil
   const [open, setOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
   // const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
 
   // ON récupère l'utilisateur courent
-  let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  useEffect(() => {
+    setCurrentUser(JSON.parse(localStorage.getItem("currentUser")))
+  }, [localStorage.getItem("currentUser")]);
 
+  // Fonction d'ouverture du menu
   const handleMenuOpen = () => {
     setMenuOpen(true);
   };
-
+  // Fonction de fermeture du menu
   const handleMenuClose = () => {
     setMenuOpen(false);
   };
@@ -78,6 +86,7 @@ const Topbar = () => {
             >
               <MenuIcon />
             </IconButton>
+            {/* Barre de menu du laterale,c-à-d de la gauche */}
             <SwipeableDrawer
               anchor="left"
               open={isMenuOpen}
@@ -110,9 +119,9 @@ const Topbar = () => {
                 {currentUser ?
                   (
                     <div className="user" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
-                      <img src={!(currentUser?.photo)  ? profile : process.env.REACT_APP_API_URL_DEVELOPPEMENT+"/"+ currentUser?.photo?.src } className='profile' alt="" />
-                  
-                      <span style={{color: 'white'}}>{currentUser?.firstname}</span>
+                      <img src={!(currentUser?.photo) ? profile : process.env.REACT_APP_API_URL + "/" + currentUser?.photo?.src} className='profile' alt="" />
+
+                      <ArrowDropDownIcon className='arrowDropdown' /><span style={{ color: 'white',marginLeft:20 }}>{currentUser?.firstname}</span>
                       {open && (
                         <div className="options">
                           {currentUser.role === "admin" && (
@@ -122,11 +131,11 @@ const Topbar = () => {
                               </Link>
                             </>
                           )}
-                          <Link className="link" to="/">
+                          <Link className="link" to="/profile">
                             Profil
                           </Link>
-                          <Link className="link" style={{color:'red'}} onClick={handleLogout}>
-                            Logout
+                          <Link className="link" style={{ color: 'red' }} onClick={handleLogout}>
+                            Déconnexion
                           </Link>
                         </div>
                       )}
@@ -147,6 +156,7 @@ const Topbar = () => {
             </SwipeableDrawer>
           </Box>
 
+          {/* Barre du menu horinzontale du haut */}
           <Stack className="navbar" direction={'row'}
             spacing={1}>
             <Link to="/" className='link'>
@@ -170,8 +180,8 @@ const Topbar = () => {
               {currentUser ?
                 (
                   <div className="user" onClick={() => setOpen(!open)}>
-                    <img src={!(currentUser?.photo)  ? profile : process.env.REACT_APP_API_URL_DEVELOPPEMENT+"/"+ currentUser?.photo?.src} className='profile' alt="" />
-                    <span>{currentUser?.firstname}</span>
+                    <img src={!(currentUser?.photo) ? profile : process.env.REACT_APP_API_URL + "/" + currentUser?.photo?.src} className='profile' alt="" />
+                    <ArrowDropDownIcon className='arrowDropdown' /><span style={{ marginLeft: 20 }}> {currentUser?.firstname}</span>
                     {open && (
                       <div className="options">
                         {currentUser?.role === "admin" && (
@@ -181,21 +191,34 @@ const Topbar = () => {
                             </Link>
                           </>
                         )}
-                        <Link className="link" to="/">
-                          Profile
+                        <Link className="link" to="/account" style={{ display:'flex', alignItems:'center' }}>
+                          <SettingsIcon  sx={{mr:1}} />
+                          <span >Compte et paramètres</span>
                         </Link>
-                        <Link className="link" style={{color: "red"}} onClick={handleLogout}>
-                          Logout
+                        <Divider />
+                        <Link className="link" to="/account" style={{ display:'flex', alignItems:'center' }}>
+                          <Notifications  sx={{mr:1}} />
+                          <span >Notifications</span>
+                        </Link>
+                        <Divider />
+                        <Link className="link" style={{ color: "red", display:'flex', alignItems:'center' }} onClick={handleLogout}>
+                          <LogoutIcon sx={{mr:1}} />
+                          <span>Déconnexion</span>
                         </Link>
                       </div>
                     )}
                   </div>
-                ) : (<><Link to="/signup" className='link'>
-                  <Stack direction='row' fontSize={16} sx={{ whiteSpace: "noWrap" }} spacing={1}><PersonAddAlt1Icon /><span>S'inscrire</span></Stack>
-                </Link>
-                  <Link to="/signin" className='link'>
-                    <Stack direction='row' fontSize={16} sx={{ whiteSpace: "noWrap" }} spacing={1}><LoginIcon /><span>Se connecter</span></Stack>
-                  </Link></>)
+                ) :
+                (
+                  <>
+                    <Link to="/signup" className='link'>
+                      <Stack direction='row' fontSize={16} sx={{ whiteSpace: "noWrap" }} spacing={1}><PersonAddAlt1Icon /><span>S'inscrire</span></Stack>
+                    </Link>
+                    <Link to="/signin" className='link'>
+                      <Stack direction='row' fontSize={16} sx={{ whiteSpace: "noWrap" }} spacing={1}><LoginIcon /><span>Se connecter</span></Stack>
+                    </Link>
+                  </>
+                )
               }
             </Stack>
           </Stack>
