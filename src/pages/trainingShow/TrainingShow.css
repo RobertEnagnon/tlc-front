@@ -1,0 +1,63 @@
+.trainingContent{
+    width: 600px !important;
+    /* background: #000; */
+}
+.chapterTitre{
+    font-size: 14px;
+    color: var(--paragraphColor);
+    margin-top: 20px !important;
+}
+.chapterContainer{
+    color: var(--paragraphColor);
+    width: 100%;
+    box-shadow: 0  0 1px var(--paragraphColor) ;
+    margin-top: 10px;
+}
+.chapter{
+    padding: 10px;
+    border-bottom: 1px solid var(--paragraphColor);
+    width: 100%;
+}
+.sectionItem{
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px !important;
+    margin-left:20px !important;
+}
+.sectionItemPlayIcon, .sectionItemPauseIcon{
+    margin-right: 10px;
+    cursor: pointer;
+    font-size: 25px !important;
+    padding: 5px;
+    border-radius: 50%;
+    background: var(--buttonHover);
+    color: var(--textColor);
+    
+}
+.sectionItemPauseIcon{
+background: var(--greenBg);
+}
+.sectionItemDuration{
+    justify-self: flex-end;
+    margin-left: auto;
+}
+.presentation{
+    width: 100% !important;
+    padding: 0 10px;
+    margin-left: 60px;
+}
+.presentationVideoContainer{
+    width: 100%;
+}
+video{
+    width: 100% ;
+    height: 420px ;
+}
+.resource{
+
+    width: 200px;
+    height: 150px;
+    background: #d7e9db;
+    border-radius: 5px;
+    padding: 20px 10px;
+}

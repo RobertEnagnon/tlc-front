@@ -58,7 +58,7 @@ function AddComment({ currentUser, tutorialId,setNewComment,pushNewComment }) {
                     Vueillez vous connecter pour ajouter un commentaire
                 </Box>
                 :
-                <BoxContent display={'flex'} alignItems={'baseline'} >
+                <BoxContent mb={2} display={'flex'} alignItems={'baseline'} sx={{width:{md:'50%', sm:"100%"}}} >
                     <TextField
                         margin='normal'
                         required
@@ -73,7 +73,9 @@ function AddComment({ currentUser, tutorialId,setNewComment,pushNewComment }) {
                         autoComplete={false}
                         value={content}
                     />
-                    <SendIcon onClick={handlePostComment} sx={{cursor: 'pointer', color: "ActiveBorder", "&:hover":{color: "red", p:2, borderRadius:"50%",alignContent: 'center'}}} />
+                    <SendIcon onClick={handlePostComment} sx={{cursor: 'pointer', color: "#acacac", "&:hover":{
+                        color:'#2aa55f',
+                        }}} />
                 </BoxContent>
             }
         </Box>

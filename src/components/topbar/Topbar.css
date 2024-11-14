@@ -62,7 +62,7 @@
   }
   
 .navbar .link:hover,.compte .link:hover,.navbar .link:focus{
-    color: #006f57;
+    color: #77a097;
     transition: all ease-in 0.3s ;
     border-bottom: 1px solid whitesmoke;
     padding-top: 5px;

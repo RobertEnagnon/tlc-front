@@ -1,0 +1,18 @@
+/* 
+.editLink{
+    width: 30px; 
+    height: 30px;
+    background-color: "#fff";
+    border-radius: "50%";
+    display: "flex"; 
+    justify-content: "center";
+    align-items: "center";
+    position: "absolute";
+    top:"50%";
+    right: "-25%";
+    border: "1px solid #ccc";
+    box-shadow: "0px 0px 4px #ccc";
+} */
+.editLink:hover{
+    background-color: rgb(186, 216, 209) !important;
+}

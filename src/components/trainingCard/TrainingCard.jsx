@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom';
 const TrainingCard = ({ course, onFavoriteToggle }) => {
   return (
     <Card>
-        <Link to="/formations/show/1">
+        <Link to={`/formations/show/${course.id}`}>
         <CardMedia
         component="img"
         height="200"
@@ -37,14 +37,14 @@ const TrainingCard = ({ course, onFavoriteToggle }) => {
         <Typography variant="body2">Durée: {course.totalDuration}</Typography>
         <Rating value={Number(course.ratings)} precision={0.5} readOnly />
       </CardContent>
-      <CardActions>
+      {/* <CardActions>
         <Button size="small" variant="contained" 
         // color="success"
         className='btnDetail'
         >
           Détails
         </Button>
-      </CardActions>
+      </CardActions> */}
         </Link>
     </Card>
   );
