@@ -1,86 +1,136 @@
-import React from 'react'
-import "./AccountSidebar.css";
-import { Box, Divider, List, ListItemButton, ListItemIcon, ListItemText, TextField, Typography } from '@mui/material';
+import React from 'react';
+import { Box, Avatar, Typography, List, ListItemButton, ListItemIcon, ListItemText, FormLabel, Input } from '@mui/material';
+import { NavLink, useLocation } from 'react-router-dom';
 import {
-    History as HistoryIcon,
-    Info as InfoIcon, Subscript as SubscriptIcon, Train as TrainIcon,
-    Edit as EditIcon
+  Person as PersonIcon,
+  History as HistoryIcon,
+  Subscriptions as SubscriptionsIcon,
+  School as SchoolIcon,
+  Settings as SettingsIcon,
 } from '@mui/icons-material';
-import profile from "../../assets/images/noavatar.jpg";
-import { Link } from 'react-router-dom';
+import { useAppContext } from '../../context/appContext';
+import { toast, ToastContainer } from 'react-toastify';
 
+const AccountSidebar = () => {
+  const { auth, setAuth, getCurrentUser, userProfile, setUserProfile, getProfile } = useAppContext();
+  const location = useLocation();
 
-const AccountSidebar = ({ auth, selectedIndex, handleListItemClick }) => {
-    return (
-        <Box sx={{ mr: "auto", width: { lg: '25%', md: '33%', sm: '100%' } }} className="side" >
-            <Typography variant='h5' color={'GrayText'} >Votre profil</Typography>
-            <Box
-                mt={1}
-                border={"1px #ccc solid"} p={2}
-                borderBottom={"5px solid #108643"}
-                borderRadius={2}
-                boxShadow={3}
-                display={'flex'}
-                flexDirection={'row'}
-                alignItems={'baseline'}
-            >
-                <Box width={70} height={70} mr={5} position={'relative'}>
-                    <img src={!(auth?.photo) ? profile : process.env.REACT_APP_API_URL + "/" + auth?.photo?.src}
-                        style={{ width: '100%', height: '100%', borderRadius: "50%" }}
-                    />
-                    <Link style={{
-                        width: 30, height: 30,
-                        backgroundColor: "#fff",
-                        borderRadius: "50%",
-                        display: "flex", justifyContent: "center",
-                        alignItems: "center",
-                        position: "absolute",
-                        top:"50%",
-                        right: "-25%",
-                        border: "1px solid #ccc",
-                        boxShadow: "0px 0px 4px #ccc",
-                    }}
-                    className='editLink'
-                    >
-                        <EditIcon sx={{ color: '#108643' }} />
-                    </Link>
-                </Box>
-                <Typography variant='h4' fontSize={'18px'}>{`${auth?.firstname} ${auth?.lastname}`}</Typography>
+  const menuItems = [
+    { name: 'Profil', icon: <PersonIcon />, path: 'profile' },
+    { name: 'Historique', icon: <HistoryIcon />, path: 'history' },
+    { name: 'Abonnements', icon: <SubscriptionsIcon />, path: 'subscriptions' },
+    { name: 'Mes Formations', icon: <SchoolIcon />, path: 'trainings' },
+    { name: 'Paramètres', icon: <SettingsIcon />, path: 'settings' },
+  ];
+
+  const handleAvatarChange = async (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0]
+      if (!file) return;
+      // setIsLoading(true)
+      try {
+        const formData = new FormData();
+        formData.append('photo', file); 
+        // Simulate API call
+        // await new Promise(resolve => setTimeout(resolve, 1000))
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/users/profile-picture`, {
+          method: 'PUT',
+          body: formData,
+          headers: {
+            'Authorization': `Bearer ${auth.token}`,
+          },
+        })
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        // In a real app, you would upload the file to a server and get a URL back
+        // setUserProfile({...userProfile, photo: URL.createObjectURL(file) })
+        const data = await response.json();
+
+        console.log('Photo de profil mise à jour:', data);
+        toast(data?.message);
+        setUserProfile(data.user);
+        // console.log("photo: ",  URL.createObjectURL(file) );
+        // console.log("auth", userProfile); 
+        // toast.success("Avatar mis à jour avec succès")
+        // setIsLoading(false)
+      } catch (error) {
+        // toast.error("Erreur lors du téléchargement de l'avatar")
+        // console.error("Erreur lors de la mise à jour de la photo de profil: ",error)
+        toast.error("Erreur lors de la mise à jour de la photo de profil");
+        console.error( error);
+        // setIsLoading(false)
+      }
+    }
+  }
+
+  return (
+    <Box
+      component="nav"
+      sx={{
+        width: { xs: '100%', md: 280 },
+        flexShrink: 0,
+        bgcolor: 'background.paper',
+        borderRadius: 2,
+        boxShadow: 1,
+        overflow: 'hidden',
+      }}
+    >
+      <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        {
+          userProfile?.photo ?
+            <Avatar
+              // src={`${process.env.REACT_APP_API_URL}/${userProfile?.photo}`}
+              src={`${userProfile?.photo}`}
+              sx={{ width: 80, height: 80, mb: 2 }}
+            />
+            :
+            <Box sx={{ width: 80, height: 80, borderRadius: 40, display: 'grid', placeItems: 'center', bgcolor: '#dfdddd', color: '#0F2027' }} >
+              <Typography variant='h5' >{auth?.firstname?.charAt(0)}</Typography>
             </Box>
-            {/* <Divider sx={{ borderBottomWidth: 2, my: 1 }} /> */}
-            <TextField sx={{ my: 4, width: '100%' }} type="search" placeholder="Recherche" />
-            <List component={'aside'} >
-                <ListItemButton selected={selectedIndex === 0}
-                    onClick={(event) => handleListItemClick(event, 0)}>
-                    <ListItemIcon>
-                        <InfoIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Profil" />
-                </ListItemButton>
-                <ListItemButton selected={selectedIndex === 1}
-                    onClick={(event) => handleListItemClick(event, 1)}>
-                    <ListItemIcon>
-                        <HistoryIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Historique" />
-                </ListItemButton>
-                <ListItemButton selected={selectedIndex === 2}
-                    onClick={(event) => handleListItemClick(event, 2)}>
-                    <ListItemIcon>
-                        <SubscriptIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Abonnements" />
-                </ListItemButton>
-                <ListItemButton selected={selectedIndex === 3}
-                    onClick={(event) => handleListItemClick(event, 3)}>
-                    <ListItemIcon>
-                        <TrainIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Mes Formations" />
-                </ListItemButton>
-            </List>
-        </Box>
-    )
-}
+        }
+        <FormLabel htmlFor="avatar-upload"
+          sx={{ cursor: 'pointer', bgcolor: "#0F2027", color: "#fff", '&:hover': { bgcolor: "#264653", transition: "all .3s" } }}
+        // className="cursor-pointer bg-blue-900 text-white p-2 rounded hover:bg-blue-600 transition"
+        >
+          Changer l'avatar
+          <Input id="avatar-upload" type="file" accept="image/*" onChange={handleAvatarChange} sx={{ display: 'none' }} />
+        </FormLabel>
+        <Typography variant="h6">{`${auth?.firstname} ${auth?.lastname}`}</Typography>
+        <Typography variant="body2" color="text.secondary">
+          {auth?.isPremium ? 'Abonné Premium' : 'Utilisateur Standard'}
+        </Typography>
+      </Box>
+      <List component="nav">
+        {menuItems?.map((item) => (
+          <ListItemButton
+            key={item.name}
+            component={NavLink}
+            to={item.path}
 
-export default AccountSidebar
+            selected={location.pathname.includes(item.path)}
+            sx={{
+              '&.Mui-selected': {
+                // bgcolor: 'primary.light',
+                // bgcolor: '#2C5364',
+                bgcolor: '#b4edce',
+                color: '#fff',
+                '&:hover': {
+                  //   bgcolor: 'primary.light',
+                  // bgcolor: '#203A43',
+                  bgcolor: '#96f7c1',
+                },
+              },
+            }}
+          >
+            <ListItemIcon  >{item.icon}</ListItemIcon>
+            <ListItemText primary={item.name} />
+          </ListItemButton>
+        ))}
+      </List>
+      <ToastContainer/>
+    </Box>
+  );
+};
+
+export default AccountSidebar;

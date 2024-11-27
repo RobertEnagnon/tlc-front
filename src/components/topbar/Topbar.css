@@ -62,9 +62,11 @@
   }
   
 .navbar .link:hover,.compte .link:hover,.navbar .link:focus{
-    color: #77a097;
+    /* color: #77a097; */
+    color: #264653;
     transition: all ease-in 0.3s ;
-    border-bottom: 1px solid whitesmoke;
+    /* border-bottom: 1px solid whitesmoke; */
+    border-bottom: 1px solid #264653;
     padding-top: 5px;
 }
 .compte{

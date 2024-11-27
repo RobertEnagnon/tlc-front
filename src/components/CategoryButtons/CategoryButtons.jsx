@@ -1,17 +1,22 @@
+
+
 import React from 'react';
 import { Box, Button } from '@mui/material';
 
-const CategoryButtons = ({ categories, onCategoryNameSelect }) => {
-  
+const CategoryButtons = ({ categories, onCategoryNameSelect, selectedCategory }) => {
   return (
-    <Box mt={4}>
+    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
       {categories?.map((category) => (
         <Button
           key={category.id}
-          variant="outlined"
-        //   color="info"
-        className='btnSubCategory'    
-          sx={{ mx: 2, my: 1 }}
+          variant={selectedCategory === category.name ? "contained" : "outlined"}
+          className={selectedCategory === category.name ? 'btnFirst' : 'btnSubCategory'}
+          sx={{ 
+            my: 1,
+            textTransform: 'none',
+            borderRadius: '20px',
+            px: 2
+          }}
           onClick={() => onCategoryNameSelect(category.name)}
         >
           {category.name}

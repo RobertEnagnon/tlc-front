@@ -1,0 +1,6 @@
+.banniere{
+    color: #ecf8f8 !important;
+    background: #11998e;  /* fallback for old browsers */
+    background: var(--greenBg);
+    
+}

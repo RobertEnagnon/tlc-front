@@ -10,15 +10,16 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+// import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAppContext } from '../../context/appContext';
 
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" to="https://ronasdev.go.yo.fr">
-        ronasdev
+        The Legend Code
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -28,7 +29,7 @@ function Copyright(props) {
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
-const defaultTheme = createTheme();
+// const defaultTheme = createTheme();
 
 export default function SignUp() {
 
@@ -36,11 +37,13 @@ export default function SignUp() {
     firstname: '',
     lastname: '',
     email: '',
-    photoId: null,
     password: '',
     confirmedPassword: ''
   });
   const [message, setMessage] = useState('');
+  const [messages, setMessages] = useState([]);
+  // const [currentUser, setCurrentUser] = useState(null)
+  const { auth, setAuth } = useAppContext()
   const navigate = useNavigate();
 
   // Méhode pour remplir les différentes propriétés de user
@@ -57,24 +60,31 @@ export default function SignUp() {
     event.preventDefault();
     // const data = new FormData(event.currentTarget);
     if (!user.firstname || !user.lastname || !user.email) {
-      setMessage('Veuillez remplir tous les champs')
-    }else{
+      // setMessage('Veuillez remplir tous les champs')
+    } else {
       try {
-        const headers = {"Content-Type": "application/json"};
-        const res = await fetch(process.env.REACT_APP_API_URL+'/auth/signup',{
+        const headers = { "Content-Type": "application/json" };
+        const res = await fetch(process.env.REACT_APP_API_URL + '/auth/register', {
           method: 'POST', body: JSON.stringify(user), headers
         });
         const data = await res.json();
         // S'il y a un message d'erreur de connexion
         console.log(data);
-        if (data.error) {
-          setMessage(data.message);
-        }else{
-          navigate('/');
+        if (data?.access_token) {
+          // Si tout se passe bien,on enregistre l'utilisateur qui vient de se connecter dans localstorage
+          localStorage.setItem("currentUser", JSON.stringify({ ...data.user, token: data.access_token }));
+          // setMessage("Connexion effectuée avec sucèss")
+          setAuth(data);
+          // On se rédirrige vers la page d'accueil
+          navigate("/account/");
+        }
+        else {
+          Array.isArray(data?.message) ? setMessages(data?.message) : setMessage(data.message);
+
         }
 
       } catch (error) {
-        
+
         console.log(error)
       }
     }
@@ -83,106 +93,109 @@ export default function SignUp() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs" sx={{ background: '#fff', mb: 5, pb: 2, borderRadius: 5,mt:'70px' }}>
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'success.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
+    // <ThemeProvider theme={defaultTheme}>
+    <Container component="main" maxWidth="xs" sx={{ background: '#fff', mb: 5, pb: 2, borderRadius: 5, mt: '70px' }}>
+      <CssBaseline />
+      <Box
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: 'success.main' }}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          S'inscrire
+        </Typography>
+        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          {message && <p style={{ color: 'red', textAlign: 'center' }}>{message}</p>}
+          {messages && messages.reverse().map((message, index) => (
+            <p key={index} style={{ color: 'red', textAlign: 'center' }}>{message}</p>
+          ))}
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="given-name"
+                name="firstname"
+                required
+                fullWidth
+                label="Prénom"
+                autoFocus
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                fullWidth
+                label="Nom"
+                name="lastname"
+                autoComplete="family-name"
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                label="Adresse Email"
+                name="email"
+                autoComplete="email"
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name="password"
+                label="mot de passe"
+                type="password"
+                autoComplete="new-password"
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name="confirmedPassword"
+                label="confirmation du mot de passe "
+                type="password"
+                onChange={handleChange}
+                autoComplete="new-password"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={<Checkbox value="allowExtraEmails" color="primary" />}
+                label="Je veux être au courant de tous les nouveaux tutoriels, formations et projets de la plateforme."
+              />
+            </Grid>
+          </Grid>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+            className="btnFirst"
+          >
             S'inscrire
-          </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-            {message && <p style={{color:'red', textAlign:'center'}}>{message}</p> }
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstname"
-                  required
-                  fullWidth
-                  label="Prénom"
-                  autoFocus
-                  onChange={handleChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  label="Nom"
-                  name="lastname"
-                  autoComplete="family-name"
-                  onChange={handleChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  label="Adresse Email"
-                  name="email"
-                  autoComplete="email"
-                  onChange={handleChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="mot de passe"
-                  type="password"
-                  autoComplete="new-password"
-                  onChange={handleChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="confirmedPassword"
-                  label="confirmation du mot de passe "
-                  type="password"
-                  onChange={handleChange}
-                  autoComplete="new-password"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="Je veux être au courant de tous les nouveaux tutoriels, formations et projets de la plateforme."
-                />
-              </Grid>
+          </Button>
+          <Grid container justifyContent="flex-end">
+            <Grid item>
+              <Link to="/signin">
+                <span style={{ color: '#01adf7', textDecoration: 'underline' }}>Avez-vous déjà un compte? Se connecter</span>
+              </Link>
             </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              className="btnFirst"
-            >
-              S'inscrire
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link to="/signin">
-                  <span style={{ color: '#01adf7', textDecoration: 'underline' }}>Avez-vous déjà un compte? Se connecter</span>
-                </Link>
-              </Grid>
-            </Grid>
-          </Box>
+          </Grid>
         </Box>
-        <Copyright sx={{ mt: 4 }} />
-      </Container>
-    </ThemeProvider>
+      </Box>
+      <Copyright sx={{ mt: 4 }} />
+    </Container>
+    // </ThemeProvider>
   );
 }

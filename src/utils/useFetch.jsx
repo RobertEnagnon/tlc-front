@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const useFetch = (url) => {
+export const useFetch = (url, token = null) => {
     const [isLoading, setIsLoading] = useState(false);
     const [apiData, setApiData] = useState(null);
     const [serverError, setServerError] = useState(null);
@@ -12,6 +12,9 @@ export const useFetch = (url) => {
             const headers = {
                 "Content-Type": "application/json",
             };
+            if(token)
+                headers.Authorization = `Bearer ${token}`;
+
             try {
                 const resp = await fetch(url, {
                     headers
@@ -26,7 +29,8 @@ export const useFetch = (url) => {
             }
         };
 
-        fetchData();
+        if(apiData == null)
+            fetchData();
 
     }, [url])
 
